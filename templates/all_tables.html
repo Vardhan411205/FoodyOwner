@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Database Tables</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger-color: #dc2626;
+            --danger-hover: #b91c1c;
+            --success-color: #16a34a;
+            --text-primary: #1f2937;
+            --bg-primary: #f3f4f6;
+            --bg-white: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .database-section {
+            margin-bottom: 3rem;
+        }
+
+        .database-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            background: var(--bg-white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+
+        th {
+            background-color: var(--bg-primary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        tr:hover {
+            background-color: var(--bg-primary);
+        }
+
+        .record-count {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .food-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 0.25rem;
+            object-fit: cover;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: var(--danger-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .database-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background: var(--bg-white);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-default {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge-partner {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .table-container {
+                margin-bottom: 1rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .table-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            max-width: 400px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container">
+        <div id="alert" class="alert"></div>
+
+        <div class="header">
+            <h1 class="title">All Database Tables</h1>
+            <div class="search-container">
+                <input type="text" 
+                       class="search-input" 
+                       placeholder="Search tables by name..." 
+                       id="tableSearch" 
+                       onkeyup="searchTables()">
+            </div>
+        </div>
+
+        <div class="database-stats">
+            <div class="stat-item">
+                <span class="stat-label">Default Database Items:</span>
+                <span class="stat-value">{{ default_items_count }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Partner Database Items:</span>
+                <span class="stat-value">{{ partner_items_count }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">User Database Items:</span>
+                <span class="stat-value">{{ user_items_count }}</span>
+            </div>
+        </div>
+
+        <div class="tables-container">
+            {% for db_name, tables in databases.items %}
+            <div class="database-section">
+                <h2 class="database-title">{{ db_name|title }} Database</h2>
+                
+                {% for table_name, table_data in tables.items %}
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-name">{{ table_name }}</h3>
+                        <div class="table-actions">
+                            <button onclick="deleteAllRecords('{{ db_name }}', '{{ table_name }}')" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Delete All Records
+                            </button>
+                            <span class="record-count">{{ table_data.rows|length }} records</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    {% for column in table_data.columns %}
+                                    <th>{{ column }}</th>
+                                    {% endfor %}
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in table_data.rows %}
+                                <tr data-id="{{ row.0 }}" data-db="{{ db_name }}" data-table="{{ table_name }}">
+                                    {% for value in row %}
+                                    <td>{{ value }}</td>
+                                    {% endfor %}
+                                    <td class="actions">
+                                        <button onclick="deleteRecord('{{ row.0 }}', '{{ db_name }}', '{{ table_name }}')" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
+        async function deleteItem(itemId, source) {
+            if (!confirm(`Are you sure you want to delete this item from the ${source} database?`)) return;
+
+            try {
+                const response = await fetch('{% url "all_tables" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        item_id: itemId,
+                        db: source
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    document.querySelector(`tr[data-id="${itemId}"][data-source="${source}"]`).remove();
+                    showAlert(data.message, 'success');
+                    updateItemCount(source, -1);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        }
+
+        async function deleteAllItems(dbName) {
+            const message = dbName === 'all' 
+                ? 'Are you sure you want to delete all items from all databases?' 
+                : `Are you sure you want to delete all items from the ${dbName} database?`;
+            
+            if (!confirm(message)) return;
+
+            try {
+                const response = await fetch('{% url "all_tables" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        action: 'delete_all',
+                        db_name: dbName
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    if (dbName === 'all') {
+                        document.querySelectorAll('tbody').forEach(tbody => tbody.innerHTML = '');
+                        updateItemCount('default', 0);
+                        updateItemCount('partner', 0);
+                        updateItemCount('user', 0);
+                    } else {
+                        document.querySelectorAll(`tr[data-source="${dbName}"]`).forEach(row => row.remove());
+                        updateItemCount(dbName, 0);
+                    }
+                    showAlert(data.message, 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        }
+
+        function updateItemCount(source, count) {
+            const countElement = document.querySelector(`.stat-item:contains('${source.charAt(0).toUpperCase() + source.slice(1)} Database') .stat-value`);
+            if (countElement) {
+                if (count === -1) {
+                    countElement.textContent = parseInt(countElement.textContent) - 1;
+                } else {
+                    countElement.textContent = count;
+                }
+            }
+        }
+
+        let currentItemId = null;
+        let currentSource = null;
+
+        function showEditModal(recordId, db, table, button) {
+            const row = button.closest('tr');
+            const cells = row.cells;
+            const columns = Array.from(row.closest('table').querySelectorAll('thead th')).map(th => th.textContent);
+            const modal = document.getElementById('editModal');
+            const fieldsContainer = document.getElementById('editFields');
+            
+            // Clear previous fields
+            fieldsContainer.innerHTML = '';
+            
+            // Set hidden fields
+            document.getElementById('editRecordId').value = recordId;
+            document.getElementById('editDb').value = db;
+            document.getElementById('editTable').value = table;
+            
+            // Create input fields for each column (except id and actions)
+            for (let i = 1; i < cells.length - 1; i++) {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'form-group';
+                
+                const label = document.createElement('label');
+                label.textContent = columns[i];
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-control';
+                input.name = columns[i];
+                input.value = cells[i].textContent;
+                
+                fieldDiv.appendChild(label);
+                fieldDiv.appendChild(input);
+                fieldsContainer.appendChild(fieldDiv);
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        document.getElementById('editForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const updates = {};
+            const recordId = formData.get('record_id');
+            const db = formData.get('db');
+            const table = formData.get('table');
+            
+            // Convert form data to updates object
+            for (let [key, value] of formData.entries()) {
+                if (!['record_id', 'db', 'table'].includes(key)) {
+                    updates[key] = value;
+                }
+            }
+            
+            try {
+                const response = await fetch('{% url "all_tables" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        action: 'update',
+                        record_id: recordId,
+                        db: db,
+                        table: table,
+                        updates: updates
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Find the row to update
+                    const row = document.querySelector(`tr[data-id="${recordId}"][data-db="${db}"][data-table="${table}"]`);
+                    const cells = row.cells;
+                    
+                    // Update each cell with new values
+                    let cellIndex = 1; // Start from 1 to skip ID column
+                    for (let key in updates) {
+                        if (cells[cellIndex]) {
+                            cells[cellIndex].textContent = updates[key];
+                            cellIndex++;
+                        }
+                    }
+                    
+                    closeEditModal();
+                    showAlert('Record updated successfully', 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+
+        async function deleteRecord(recordId, db, table) {
+            if (!confirm(`Are you sure you want to delete this record from ${table}?`)) return;
+
+            try {
+                const response = await fetch('{% url "all_tables" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        action: 'delete_record',
+                        record_id: recordId,
+                        db: db,
+                        table: table
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    const row = document.querySelector(`tr[data-id="${recordId}"][data-db="${db}"][data-table="${table}"]`);
+                    row.remove();
+                    showAlert(data.message, 'success');
+                    updateRecordCount(db, table, -1);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        }
+
+        async function deleteAllRecords(db, table) {
+            if (!confirm(`Are you sure you want to delete all records from ${table}?`)) return;
+
+            try {
+                const response = await fetch('{% url "all_tables" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        action: 'delete_all',
+                        db: db,
+                        table: table
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    const tbody = document.querySelector(`tr[data-db="${db}"][data-table="${table}"]`).closest('tbody');
+                    tbody.innerHTML = '';
+                    showAlert(data.message, 'success');
+                    updateRecordCount(db, table, 0);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        }
+
+        function updateRecordCount(db, table, count) {
+            const container = document.querySelector(`[data-db="${db}"][data-table="${table}"]`).closest('.table-container');
+            const countElement = container.querySelector('.record-count');
+            if (count === -1) {
+                const currentCount = parseInt(countElement.textContent);
+                countElement.textContent = `${currentCount - 1} records`;
+            } else {
+                countElement.textContent = `${count} records`;
+            }
+        }
+
+        function searchTables() {
+            const searchInput = document.getElementById('tableSearch');
+            const filter = searchInput.value.toLowerCase();
+            const tableContainers = document.querySelectorAll('.table-container');
+
+            tableContainers.forEach(container => {
+                const tableName = container.querySelector('.table-name').textContent.toLowerCase();
+                if (tableName.includes(filter)) {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html> 
