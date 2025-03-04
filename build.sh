@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+# Create necessary directories
+mkdir -p assets staticfiles
+
 # Install dependencies
 pip install -r requirements.txt
 
