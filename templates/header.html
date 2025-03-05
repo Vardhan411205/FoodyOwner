@@ -39,19 +39,26 @@
             backdrop-filter: blur(10px);
         }
 
-        .nav-list {
-            list-style-type: none;
+        .nav-container {
+            width: 100%;
             margin: 0 auto;
-            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-list {
             display: flex;
             align-items: center;
-            width:100%;
-            padding: 0 1rem;
+            gap: 1.5rem;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-item {
             display: inline;
-            margin: 0 15px;
         }
 
         .nav-link {
@@ -77,15 +84,14 @@
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary-color);
-            margin-right: auto;
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-decoration: none;
         }
 
         .nav-right {
-            margin-left: auto;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -111,60 +117,164 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
+        .logout-link {
+            color: #dc2626;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 2px solid #dc2626;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-link:hover {
+            background-color: #dc2626;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+        }
+
         .active {
             background-color: var(--bg-primary);
             color: var(--primary-color);
             font-weight: 600;
         }
 
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
         @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
             .nav-list {
-                padding: 0 0.5rem;
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--bg-white);
+                padding: 1rem;
+                box-shadow: var(--shadow-md);
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-list.show {
+                display: flex;
             }
 
             .nav-item {
-                margin: 0 0.5rem;
-            }
-
-            .logo {
-                font-size: 1.1rem;
+                width: 100%;
             }
 
             .nav-link {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .nav-right {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .profile-link, .logout-link {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a href="{% url 'index' %}" class="nav-link logo">
-                    <i class="fas fa-utensils"></i> Mr.Foody & Ms.Foody
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'quick_bite' %}" class="nav-link {% if request.path == '/quick-bite/' %}active{% endif %}">
-                    <i class="fas fa-hamburger"></i> Quick Bite
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'all_tables' %}" class="nav-link {% if request.path == '/all-tables/' %}active{% endif %}">
-                    <i class="fas fa-th-large"></i> All Tables
-                </a>
-            </li>
-            <div class="nav-right">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="logo">
+                <i class="fas fa-utensils"></i> Mr.Foody & Ms.Foody
+            </a>
+            
+            <button class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-list" id="navList">
                 <li class="nav-item">
-                    <a href="{% url 'edit_profile' %}" class="profile-link {% if request.path == '/profile/' %}active{% endif %}">
-                        <i class="fas fa-user-circle"></i> Profile
+                    <a href="{% url 'quick_bite' %}" class="nav-link {% if request.path == '/quick-bite/' %}active{% endif %}">
+                        <i class="fas fa-hamburger"></i> Quick Bite
                     </a>
                 </li>
-            </div>
-        </ul>
+                <li class="nav-item">
+                    <a href="{% url 'all_tables' %}" class="nav-link {% if request.path == '/all-tables/' %}active{% endif %}">
+                        <i class="fas fa-th-large"></i> All Tables
+                    </a>
+                </li>
+                <div class="nav-right">
+                    <li class="nav-item">
+                        <a href="{% url 'edit_profile' %}" class="profile-link {% if request.path == '/profile/' %}active{% endif %}">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}" class="logout-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </div>
+            </ul>
+        </div>
     </nav>
     <!-- Add spacing to prevent content from hiding under fixed navbar -->
     <div style="height: 70px;"></div>
+
+    <script>
+        function toggleMenu() {
+            const navList = document.getElementById('navList');
+            navList.classList.toggle('show');
+            
+            const hamburger = document.querySelector('.hamburger i');
+            if (navList.classList.contains('show')) {
+                hamburger.classList.remove('fa-bars');
+                hamburger.classList.add('fa-times');
+            } else {
+                hamburger.classList.remove('fa-times');
+                hamburger.classList.add('fa-bars');
+            }
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navList = document.getElementById('navList');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (!navList.contains(event.target) && !hamburger.contains(event.target)) {
+                navList.classList.remove('show');
+                const hamburgerIcon = document.querySelector('.hamburger i');
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when window is resized above mobile breakpoint
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const navList = document.getElementById('navList');
+                navList.classList.remove('show');
+                const hamburgerIcon = document.querySelector('.hamburger i');
+                hamburgerIcon.classList.remove('fa-times');
+                hamburgerIcon.classList.add('fa-bars');
+            }
+        });
+    </script>
 </body>
 </html> 

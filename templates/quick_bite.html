@@ -216,28 +216,66 @@
             cursor: not-allowed;
         }
 
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1.5rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            background: white;
+        }
+
+        /* Add smooth scrollbar for better UX */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* Update table styles */
         .food-items-table {
             width: 100%;
             min-width: 800px;
             border-collapse: separate;
             border-spacing: 0;
             background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 0;  /* Remove margin as container handles it */
         }
 
-        .food-items-table th,
-        .food-items-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
+        /* Keep table header visible while scrolling */
+        .food-items-table thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
         }
 
         .food-items-table th {
             background: #f8f8f8;
             font-weight: 600;
             color: #333;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #eee;
+        }
+
+        .food-items-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
         }
 
         .food-items-table tr:hover {
@@ -302,6 +340,26 @@
             .add-new-btn {
                 width: 100%;
                 justify-content: center;
+            }
+        }
+
+        /* Add scroll indicator */
+        @media (max-width: 1024px) {
+            .table-container::after {
+                content: '→';
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 20px;
+                color: #666;
+                animation: scroll-hint 1s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            @keyframes scroll-hint {
+                0%, 100% { transform: translate(0, -50%); }
+                50% { transform: translate(5px, -50%); }
             }
         }
     </style>
